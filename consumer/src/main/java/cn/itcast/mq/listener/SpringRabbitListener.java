@@ -8,6 +8,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * @author nightmare
@@ -15,6 +16,34 @@ import java.time.LocalDateTime;
  */
 @Component
 public class SpringRabbitListener {
+    //消息转换器，传输对象
+    @RabbitListener(queues = "objectMap.queue")
+    public void listenObjectQueue(Map<Object,String > object) {
+
+        System.out.println("消费者接收到消息：["+object+"]");
+    }
+
+
+    //Topic主题交换机
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(name = "topic.queue1"),
+            exchange = @Exchange(name = "itcast.topic",type = ExchangeTypes.TOPIC),
+            key = "china.#"
+    ))
+    public void listenTopicQueue1(String msg){
+        System.out.println("消费者接收到topic.queue1的消息：["+msg+"]");
+    }
+
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(name = "topic.queue2"),
+            exchange = @Exchange(name = "itcast.topic",type = ExchangeTypes.TOPIC),
+            key = "#.news"
+    ))
+    public void listenTopicQueue2(String msg){
+        System.out.println("消费者接收到topic.queue2的消息：["+msg+"]");
+    }
+
+
 
     //路由选择，DirectExchange交换机
     @RabbitListener(bindings = @QueueBinding(

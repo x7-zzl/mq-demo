@@ -9,12 +9,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class SpringAMQPTest {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    //发送对象，消息转换器
+    @Test
+    public void testObjectMessage() {
+        String queueName = "objectMap.queue";
+        Map<Object,String> message=new HashMap<>();
+        message.put("姓名","玉");
+        message.put("年龄","20");
+        message.put("umr","xm");
+        rabbitTemplate.convertAndSend(queueName, message);
+    }
+
+
+    //Topic主题交换机
+    //使用通配符选择路由策略
+    @Test
+    public void testSendTopicExchange(){
+        //交换机名称
+        String exchangeName="itcast.topic";
+
+        String  routingKey="china.news";
+//        String  routingKey="japan.news";
+        //消息
+        String message="hello,"+routingKey;
+        //发送消息
+        rabbitTemplate.convertAndSend(exchangeName,routingKey,message);
+    }
 
     //Direct路由交换机
     //一次发送，工具路由key选择队列接收
