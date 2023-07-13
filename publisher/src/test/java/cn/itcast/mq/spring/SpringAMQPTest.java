@@ -16,6 +16,21 @@ public class SpringAMQPTest {
     private RabbitTemplate rabbitTemplate;
 
 
+    //Direct路由交换机
+    //一次发送，工具路由key选择队列接收
+    @Test
+    public void testSendDirectExchange(){
+        //交换机名称
+        String exchangeName="itcast.direct";
+
+//        String  routingKey="yellow";
+        String  routingKey="red";
+        //消息
+        String message="hello,"+routingKey;
+        //发送消息
+        rabbitTemplate.convertAndSend(exchangeName,routingKey,message);
+    }
+
     //Fanout交换机，广播，一个交换就绑定多个队列
     //一次发送，多个队列共同接收
     @Test
