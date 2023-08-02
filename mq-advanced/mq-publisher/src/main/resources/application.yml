@@ -1,0 +1,16 @@
+logging:
+  pattern:
+    dateformat: HH:mm:ss:SSS
+  level:
+    cn.itcast: debug
+spring:
+  rabbitmq:
+    host: 192.168.239.128 # rabbitMQ的ip地址
+    port: 5672 # 端口
+    #    username: redis
+    #    password: 123321
+    virtual-host: /
+    publisher-confirm-type: correlated   #生产者确认:  异步回调
+    publisher-returns: true   #开启publish-return功能
+    template:
+      mandatory: true  #定义消息路由失败的策略；false直接丢掉
